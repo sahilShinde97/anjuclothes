@@ -1,5 +1,5 @@
 import CommonForm from "@/components/common/Form";
-import { registerFormControls } from "@/config";
+import { registerFormControls } from "@/hooks/config";
 import { useToast } from "@/hooks/use-toast";
 import { registerUser } from "@/store/auth-slice";
 import { useState } from "react";

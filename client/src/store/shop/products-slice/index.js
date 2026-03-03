@@ -35,7 +35,11 @@ export const fetchProductDetails = createAsyncThunk(
 const shoppingProductSlice = createSlice({
   name: "shoppingProduct",
   initialState,
-  reducers: {},
+  reducers: {
+    setProductDetails : (state)=>{
+      state.productDetails = null
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllFilteredProduct.pending, (state) => {
@@ -63,4 +67,5 @@ const shoppingProductSlice = createSlice({
   },
 });
 
+export const {setProductDetails} = shoppingProductSlice.actions
 export default shoppingProductSlice.reducer;

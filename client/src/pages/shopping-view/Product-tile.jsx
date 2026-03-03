@@ -2,12 +2,16 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { brandOptionsMap, categoryOptionsMap } from "@/config";
+import { brandOptionsMap, categoryOptionsMap } from "@/hooks/config";
 
-function ShoppingProductTile({ product,handleGetProductDetails }) {
+function ShoppingProductTile({
+  product,
+  handleGetProductDetails,
+  handleAddtoCart,
+}) {
   return (
     <Card className="w-full max-w-sm max-auto">
-      <div onClick={()=> handleGetProductDetails(product?._id)}>
+      <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
             src={product?.image}
@@ -43,10 +47,15 @@ function ShoppingProductTile({ product,handleGetProductDetails }) {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Add to cart</Button>
-        </CardFooter>
       </div>
+      <CardFooter>
+        <Button
+          onClick={() => handleAddtoCart(product?._id)}
+          className="w-full"
+        >
+          Add to cart
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

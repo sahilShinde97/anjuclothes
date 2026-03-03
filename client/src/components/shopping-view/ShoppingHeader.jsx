@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { shoppingViewHeaderMenuItems } from "@/config";
+import { shoppingViewHeaderMenuItems } from "@/hooks/config";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logOutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useEffect, useState } from "react";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
   return (
@@ -39,19 +42,39 @@ function MenuItems() {
 
 function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
-
+  const [openCartSheet, setOpenCartSheet] = useState(false);
   const dispatch = useDispatch();
-  function handleLogout(){
-    dispatch(logOutUser())
+  function handleLogout() {
+    dispatch(logOutUser());
   }
+
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
+
+  console.log(cartItems, "sahil");
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Button variant="outline" size="icon">
-        <ShoppingBasket className="w-6 h-6" />
-      </Button>
-      <span className="sr-only">User Cart</span>
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          variant="outline"
+          size="icon"
+        >
+          <ShoppingBasket className="w-6 h-6" />
+          <span className="sr-only">User Cart</span>
+        </Button>
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
+      </Sheet>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -64,7 +87,7 @@ function HeaderRightContent() {
         <DropdownMenuContent side="right" className="w-56">
           <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={()=>navigate('/shop/account')}>
+          <DropdownMenuItem onClick={() => navigate("/shop/account")}>
             <CircleUserRound className="mt-2 h-4 w-4" />
             Account
           </DropdownMenuItem>
@@ -104,11 +127,10 @@ function ShoppingHeader() {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-        
-          <div className="hidden lg:block">
-            <HeaderRightContent />
-          </div>
-        
+
+        <div className="hidden lg:block">
+          <HeaderRightContent />
+        </div>
       </div>
     </header>
   );
