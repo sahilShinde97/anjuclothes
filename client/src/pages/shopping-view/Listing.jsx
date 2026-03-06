@@ -99,17 +99,19 @@ function ShoppingListing() {
   }, []);
 
   useEffect(() => {
-    const categoryFromURL = searchParams.get("category");
+  const params = Object.fromEntries([...searchParams]);
 
-    if (categoryFromURL) {
-      const newFilters = {
-        category: categoryFromURL.split(","),
-      };
+  if (Object.keys(params).length > 0) {
+    const updatedFilters = {};
 
-      setFilters(newFilters);
-      sessionStorage.setItem("filters", JSON.stringify(newFilters));
+    for (const key in params) {
+      updatedFilters[key] = params[key].split(",");
     }
-  }, [searchParams]);
+
+    setFilters(updatedFilters);
+    sessionStorage.setItem("filters", JSON.stringify(updatedFilters));
+  }
+}, [searchParams]);
 
   // Update URL when filters change
   useEffect(() => {

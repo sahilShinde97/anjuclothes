@@ -90,9 +90,12 @@ function HeaderRightContent() {
           onClick={() => setOpenCartSheet(true)}
         >
           <ShoppingBasket className="w-6 h-6" />
+          <span className="sr-only">User cart</span>
         </Button>
-
-        <UserCartWrapper cartItems={cartItems?.items || []} />
+        <UserCartWrapper
+          setOpenCartSheet={setOpenCartSheet}
+          cartItems={cartItems?.items || []}
+        />
       </Sheet>
 
       <DropdownMenu>
@@ -105,9 +108,7 @@ function HeaderRightContent() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent side="right" className="w-56">
-          <DropdownMenuLabel>
-            Logged in as {user?.userName}
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
 
           <DropdownMenuSeparator />
 
