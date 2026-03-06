@@ -4,9 +4,8 @@ const addAddress = async (req, res) => {
   try {
     const { userId, address, city, pincode, phone, notes } = req.body;
 
-    useInsertionEffect();
     if (!userId || !address || !city || !pincode || !phone || !notes) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid data provided!",
       });
@@ -31,7 +30,7 @@ const addAddress = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error adding address",
     });
   }
 };
